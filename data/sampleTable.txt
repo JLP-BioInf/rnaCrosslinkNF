@@ -1,0 +1,3 @@
+file	group	sample	sampleName
+rRNA1_S1_gapped.txt	s	1	s1
+rRNA1C_S4_gapped.txt	c	1	c1
