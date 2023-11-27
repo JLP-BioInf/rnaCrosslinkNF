@@ -30,14 +30,14 @@ The main output files are the files entitled *X_gapped.txt*. These are the input
 
 ## The Pipeline
 
-### cutAdapt (Adaptors)
+### Cutadapt (Adaptors)
 
 ### PEAR
 
 ### collapse UMI
 
-### Cutadape (UMI)
+### Cutadapt (UMI)
 
 ### STAR alignment
 
-### Process SAM 
+### Process SAM
