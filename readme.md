@@ -3,7 +3,7 @@
 
 ## About
 
-This pre-processing pipeline is designed to take raw reads from a COMRADES experiment through to processed files that can be used as input for the comradesOO R package: [github](https://github.com/JLP-BioInf/comradesOO), [CRAN](https://CRAN.R-project.org/package=comradesOO) pipeline
+This pre-processing pipeline is designed to take raw reads from a COMRADES experiment through to processed files that can be used as input for the comradesOO R package: [github](https://github.com/JLP-BioInf/comradesOO), [CRAN](https://CRAN.R-project.org/package=comradesOO)
 
 The [comradesOO](https://github.com/JLP-BioInf/comradesOO) pipeline will work with other types of RNA crosslinking data and library reparation protocols differ between methods. The pipeline is straightforward and the only requirement for the R package is the production of a text output file with the details of the gapped alignments to the transcriptome and their location.
 
@@ -29,3 +29,15 @@ The main output files are the files entitled *X_gapped.txt*. These are the input
 
 
 ## The Pipeline
+
+### cutAdapt (Adaptors)
+
+### PEAR
+
+### collapse UMI
+
+### Cutadape (UMI)
+
+### STAR alignment
+
+### Process SAM 
