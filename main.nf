@@ -40,7 +40,7 @@ workflow {
     sam            = SAMTOOLSVIEW ( alignedreads,
                                     collapsedReads)
     PROCESSSAM( sam )
-    multiqc( f2ch.mix( f1ch,
+    MULTIQC( f2ch.mix( f1ch,
                        f3ch,
                      alignedreads ).collect( ) )
 }
@@ -313,7 +313,7 @@ process FASTQC3 {
     """
 }
 
-process multiqc {
+process MULTIQC {
     cache 'deep'
     publishDir params.outdir, mode : "copy"
 

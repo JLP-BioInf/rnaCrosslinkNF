@@ -43,15 +43,96 @@ The main output files are the files entitled *X_gapped.txt*. These are the input
 ![](https://github.com/JLP-BioInf/comradesOO/blob/main/vignettes/inputFileSchematic.jpg)
 
 ## The Pipeline
+\
+The pipeline is straightforward, here is a run down of the steps and parameters in the pre-processing. You can use this pipeline or alter it to suit your own library preparation protocol.
 
 ### Cutadapt (Adaptors)
 
+```
+cutadapt \
+    -b AGATCGGAAGAGCACACGTCTGAACTCCAGTC \
+    -b AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
+    -B AGATCGGAAGAGCACACGTCTGAACTCCAGTC \
+    -B AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
+    -o ${sample_id}_R1_T.fastq.gz  \
+    -p ${sample_id}_R2_T.fastq.gz  \
+    -j 10 \
+    --minimum-length 10 \
+    ${reads[0]} \
+    ${reads[1]}
+```
+
 ### PEAR
+
+```
+pear  \
+    --min-assembly-length 20 \
+    -f ${reads[0]}  \
+    -r ${reads[1]}   \
+    -o $sample_id \
+    -v 7 \
+    -j 5
+```
 
 ### collapse UMI
 
+```    python3 tstk/collapse.py \
+     --minreads 1 \
+    ${reads} \
+     ${output}
+```
+
 ### Cutadapt (UMI)
+
+```
+cutadapt \
+    -m 20 \
+    -u -6 \
+    -o ${output} \
+    -j 10 \
+    --minimum-length 10 \
+    ${reads}
+```
 
 ### STAR alignment
 
+```
+mkdir $pair_id
+STAR \
+    --runMode alignReads \
+    --genomeDir $starIndexCh \
+    --readFilesIn  ${reads}  \
+    --outFileNamePrefix $pair_id  \
+     --runThreadN 5 --genomeLoad NoSharedMemory \
+     --outReadsUnmapped Fastx  \
+     --outFilterMultimapNmax 100000 \
+     --outSAMattributes All \
+     --outSAMtype BAM SortedByCoordinate \
+     --alignIntronMin 4 \
+     --alignIntronMax 3900000000 \
+     --outFilterScoreMinOverLread 0 \
+     --scoreGap 0 \
+     --scoreGapNoncan 0 \
+     --scoreGapGCAG 0 \
+     --scoreGapATAC 0 \
+    --scoreGenomicLengthLog2scale -1 \
+     --chimFilter None \
+     --chimOutType WithinBAM HardClip --chimSegmentMin 15 \
+     --chimJunctionOverhangMin 15 --chimScoreJunctionNonGTAG 0 \
+     --chimScoreDropMax 80 \
+     --chimMainSegmentMultNmax  100000
+```
+
 ### Process SAM
+
+```
+Rscript $baseDir/bin/sam2hyb.R \
+    nonChimera.sam \
+    nochim.txt \
+    0
+
+Rscript $baseDir/bin/samChimera2hyb.R \
+        Chimera.sam \
+        chim.txt \
+        0
+```
