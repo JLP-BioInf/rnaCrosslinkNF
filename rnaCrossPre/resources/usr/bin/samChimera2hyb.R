@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 ################################################################################
 # test the mapping with STAR
 ################################################################################
@@ -53,6 +55,7 @@ args <- commandArgs(trailingOnly = TRUE)
 
 
 gappedAln = read.table(args[1], header = F, skip = args[3], fill = T)
+#gappedAln = read.table("Chimera.sam", header = F, fill = T)
 gappedAln = gappedAln[ nchar(as.character(gappedAln$V21)) > 55 , ]
 #read in  the sam files:
 
@@ -264,6 +267,8 @@ hetDF2 = cbind.data.frame(hetDF[x,],hetDF[y,])
 
 # now make it into a hybStyle Df
 hetDF3 = hetDF2[,c(1,2,3,4,5,6,7,8,9,18,19,20,21,22,23)]
+
+
 
 
 write.table(hetDF3,file = args[2], quote = F, row.names = F, col.names = F, sep ="\t")
