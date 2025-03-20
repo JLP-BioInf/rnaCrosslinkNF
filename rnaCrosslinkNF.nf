@@ -14,7 +14,7 @@
  */
 
 
-// enable bianies for extra functionality
+// enable bianaries for extra functionality
 nextflow.enable.dsl=2
 nextflow.enable.moduleBinaries = true
 
@@ -35,7 +35,7 @@ params.transcriptome = "./Transcripts.fasta"
 params.outdir = "$baseDir/results_myc_neb"
 params.sampleTable= "$baseDir/data/sampleTable.txt"
 
-// params.starIndex = "/mnt/home3/miska/jlp76/referenceGenomes/Homo_sapiens/NCBI/GRCh38/Sequence/STARCOMRADESRef/"
+
 
 
 
