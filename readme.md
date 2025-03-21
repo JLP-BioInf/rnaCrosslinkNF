@@ -1,4 +1,4 @@
-# rnaCrosslinkOO - Pre-processing for COMRADES experimental data
+# rnaCrosslinkNF - Pre-processing for [rnaCrosslinkOO](https://github.com/JLP-BioInf/comradesOO) - COMRADES experimental data
 
 
 ## About
