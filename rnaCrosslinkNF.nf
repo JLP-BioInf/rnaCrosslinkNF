@@ -14,7 +14,7 @@
  */
 
 
-// enable bianies for extra functionality
+// enable bianaries for extra functionality
 nextflow.enable.dsl=2
 nextflow.enable.moduleBinaries = true
 
@@ -30,12 +30,12 @@ include { fastqc as fastqc3 } from './rnaCrossPre'
 
 
 // Parameters
-params.reads = "/mnt/home3/miska/jlp76/projects/bianca/2024_Dec_new_lib_old_lib_htt_myc_comrades_OMER/comrades_pre-processingtest/analysis/1_raw/data/*neb*_R{1,2}.fastq.gz"
-params.transcriptome = "/mnt/home3/miska/jlp76/projects/bianca/2024_Dec_new_lib_old_lib_htt_myc_comrades_OMER/comrades_pre-processingtest/analysis/1_raw/mycTranscripts.fasta"
+params.reads = "./data/*neb*_R{1,2}.fastq.gz"
+params.transcriptome = "./Transcripts.fasta"
 params.outdir = "$baseDir/results_myc_neb"
 params.sampleTable= "$baseDir/data/sampleTable.txt"
 
-// params.starIndex = "/mnt/home3/miska/jlp76/referenceGenomes/Homo_sapiens/NCBI/GRCh38/Sequence/STARCOMRADESRef/"
+
 
 
 
