@@ -19,12 +19,12 @@ nextflow.enable.dsl=2
 nextflow.enable.moduleBinaries = true
 
 
-// inncludes single
+// includes single-use processes
 include { pear; gunzip; cutadapt; fastqc; multiqc ; starIndex; tstk} from './rnaCrossPre'
 include {samtoolsView; align; samtools_idxstats; processSAM;cutadaptr4} from './rnaCrossPre'
 
 
-// inncludes repeats
+// inncludes multi-use functions
 include { fastqc as fastqc2 } from './rnaCrossPre'
 include { fastqc as fastqc3 } from './rnaCrossPre'
 
@@ -34,11 +34,6 @@ params.reads = "./data/*neb*_R{1,2}.fastq.gz"
 params.transcriptome = "./Transcripts.fasta"
 params.outdir = "$baseDir/results_myc_neb"
 params.sampleTable= "$baseDir/data/sampleTable.txt"
-
-
-
-
-
 
 
 
@@ -56,7 +51,6 @@ workflow {
 
 
     // Trim Adapters                 --------
-    trimmedreads =   cutadaptr4(read_pairs_ch)
     trimmedreads2 =   cutadapt(read_pairs_ch)
 
 

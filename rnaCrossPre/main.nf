@@ -107,7 +107,7 @@ process samtoolsView{
 
 
     """
-    samtools view ${reads} > ${output}
+    samtools view ${reads} > ${reads.baseName}.bam
 
     cut -f3,6 ${output} > ${reads.baseName}.tNamesCigars
 
@@ -149,7 +149,7 @@ process align {
          --outFilterScoreMinOverLread 0 --outFilterMatchNminOverLread 0 \
 	       --outFilterMismatchNmax 1 \
          --alignSJoverhangMin 11 \
-         --outFilterMultimapNmax 15 \
+         --outFilterMultimapNmax 50 \
          --outSAMattributes All \
          --outSAMtype BAM Unsorted \
          --alignIntronMin 4 \
@@ -216,13 +216,14 @@ process cutadapt{
     script:
     """
     cutadapt \
-                  -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA \
-                  -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
-                  -n 2 \
+        -q 10 \
+        -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA \
+        -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
+        -n 2 \
         -o ${sample_id}_t2_R1_T.fastq.gz  \
         -p ${sample_id}_t2_R2_T.fastq.gz  \
         -j 10 \
-                  --minimum-length 15 \
+        --minimum-length 25 \
         ${reads[0]} \
         ${reads[1]}
 
@@ -273,20 +274,20 @@ process samtools_idxstats {
     path log
 
     output:
-    path "${bam_file.baseName}_sorted.bam.bam" // Sorted BAM file
-    path "${bam_file.baseName}_sorted.bam.bam.bai" // Index file
+    path "${bam_file.baseName}_sorted.bam" // Sorted BAM file
+    path "${bam_file.baseName}_sorted.bam.bai" // Index file
     path "${bam_file.baseName}_idxstats.txt" // idxstats file
 
     script:
     """
     # Sort the BAM file
-    samtools sort  ${bam_file} ${bam_file.baseName}_sorted.bam
+    samtools sort  ${bam_file}  ${bam_file.baseName}_sorted
 
     # Index the sorted BAM file
-    samtools index ${bam_file.baseName}_sorted.bam.bam
+    samtools index ${bam_file.baseName}_sorted.bam
 
     # Generate idxstats
-    samtools idxstats ${bam_file.baseName}_sorted.bam.bam > ${bam_file.baseName}_idxstats.txt
+    samtools idxstats ${bam_file.baseName}_sorted.bam > ${bam_file.baseName}_idxstats.txt
     """
 }
 
