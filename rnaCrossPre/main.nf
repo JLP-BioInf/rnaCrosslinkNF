@@ -350,7 +350,7 @@ process tstk {
         output = sample_id + 'assembled.tstk.fasta'
     """
 
-    python3 ~/.local/lib/python3.6/site-packages/tstk/collapse.py \
+    python3 collapse.py \
      --minreads 1 \
     ${reads} \
      ${output}
