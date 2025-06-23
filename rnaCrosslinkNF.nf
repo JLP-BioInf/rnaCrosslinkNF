@@ -41,24 +41,24 @@ params.sampleTable= "$baseDir/data/sampleTable.txt"
 
 workflow {
 
-    // Read channel and STAR Index --------
+    // Read channel and STAR Index  --------
     read_pairs_ch = channel.fromFilePairs( params.reads, checkIfExists: true )
     starIndexCh = starIndex(params.transcriptome)
 
 
-    // Fastqc of Raw          --------
+    // Fastqc of Raw                --------
     f1ch = fastqc(read_pairs_ch,Channel.value("raw"))
 
 
-    // Trim Adapters                 --------
+    // Trim Adapters                --------
     trimmedreads2 =   cutadapt(read_pairs_ch)
 
 
-    // Fastqc of Trimmed      --------
+    // Fastqc of Trimmed            --------
     f3ch = fastqc2(trimmedreads2,Channel.value("trim"))
 
 
-    // Assemble Reads             --------
+    // Assemble Reads                --------
     assembledReads = pear( gunzip(trimmedreads2))
     f4ch = fastqc3(assembledReads,Channel.value("assembled"))
 
@@ -68,19 +68,19 @@ workflow {
 
 
 
-    // Align the clean reads                   --------
-    alignedreads1 = align(starIndexCh,cleanReads,Channel.value(3))
+    // Align the clean reads          --------
+    alignedreads = align(starIndexCh,cleanReads,Channel.value(3))
 
 
-    // Make sam files         --------
-    view = samtoolsView(alignedreads1,assembledReads)
+    // Make sam files                 --------
+    view = samtoolsView(alignedreads)
     processSAM(view)
 
 
-    // Make stats with samtools  --------
-    samtools = samtools_idxstats(alignedreads1)
+    // Make stats with samtools       --------
+    samtools = samtools_idxstats(alignedreads)
 
 
-    // MultiQC         --------
-    multiqc(f1ch.mix(f3ch,f4ch,alignedreads1).collect()) //fix the input channel
+    // MultiQC                        --------
+    multiqc(f1ch.mix(f3ch,f4ch,alignedreads).collect()) //fix the input channel
 }

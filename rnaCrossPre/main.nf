@@ -96,14 +96,12 @@ process samtoolsView{
     input:
     path reads
     path log
-    tuple val(sample_id) , path(collapsed)
 
     output:
     tuple val(sample_id) , path("${sample_id}.sam")
     tuple val(sample_id) , path("${reads.baseName}.tNamesCigars")
 
     script:
-    output = sample_id + ".sam"
 
 
     """
