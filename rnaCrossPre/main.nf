@@ -96,12 +96,14 @@ process samtoolsView{
     input:
     path reads
     path log
+    tuple val(sample_id) , path(collapsed)
 
     output:
-    tuple val("${reads.baseName}") , path("${reads.baseName}.sam")
-    tuple val("${reads.baseName}") , path("${reads.baseName}.tNamesCigars")
+    tuple val(sample_id) , path("${reads.baseName}.sam")
+    tuple val(sample_id) , path("${reads.baseName}.tNamesCigars")
 
     script:
+    output = sample_id + ".sam"
 
 
     """
@@ -147,7 +149,7 @@ process align {
          --outFilterScoreMinOverLread 0 --outFilterMatchNminOverLread 0 \
 	       --outFilterMismatchNmax 1 \
          --alignSJoverhangMin 11 \
-         --outFilterMultimapNmax 50 \
+         --outFilterMultimapNmax 15 \
          --outSAMattributes All \
          --outSAMtype BAM Unsorted \
          --alignIntronMin 4 \
@@ -214,10 +216,9 @@ process cutadapt{
     script:
     """
     cutadapt \
-        -q 10 \
-        -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA \
-        -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
-        -n 2 \
+                  -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA \
+                  -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
+                  -n 2 \
         -o ${sample_id}_t2_R1_T.fastq.gz  \
         -p ${sample_id}_t2_R2_T.fastq.gz  \
         -j 10 \
@@ -246,7 +247,7 @@ process starIndex {
     mkdir index
     STAR  --runMode genomeGenerate \
           --genomeDir index \
-          --genomeSAindexNbases 7 \
+          --genomeSAindexNbases 1 \
           --genomeFastaFiles $transcriptome \
           --runThreadN 20 \
           --limitGenomeGenerateRAM 190936728608
@@ -272,20 +273,20 @@ process samtools_idxstats {
     path log
 
     output:
-    path "${bam_file.baseName}_sorted.bam" // Sorted BAM file
-    path "${bam_file.baseName}_sorted.bam.bai" // Index file
+    path "${bam_file.baseName}_sorted.bam.bam" // Sorted BAM file
+    path "${bam_file.baseName}_sorted.bam.bam.bai" // Index file
     path "${bam_file.baseName}_idxstats.txt" // idxstats file
 
     script:
     """
     # Sort the BAM file
-    samtools sort  ${bam_file}  ${bam_file.baseName}_sorted
+    samtools sort  ${bam_file}  ${bam_file.baseName}_sorted.bam
 
     # Index the sorted BAM file
-    samtools index ${bam_file.baseName}_sorted.bam
+    samtools index ${bam_file.baseName}_sorted.bam.bam
 
     # Generate idxstats
-    samtools idxstats ${bam_file.baseName}_sorted.bam > ${bam_file.baseName}_idxstats.txt
+    samtools idxstats ${bam_file.baseName}_sorted.bam.bam > ${bam_file.baseName}_idxstats.txt
     """
 }
 
@@ -350,7 +351,7 @@ process tstk {
         output = sample_id + 'assembled.tstk.fasta'
     """
 
-    python3 collapse.py \
+    python3 ~/.local/lib/python3.8/site-packages/tstk/collapse.py \
      --minreads 1 \
     ${reads} \
      ${output}
