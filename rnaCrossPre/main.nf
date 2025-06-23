@@ -98,16 +98,16 @@ process samtoolsView{
     path log
 
     output:
-    tuple val(sample_id) , path("${sample_id}.sam")
+    tuple val(sample_id) , path("${reads.baseName}.sam")
     tuple val(sample_id) , path("${reads.baseName}.tNamesCigars")
 
     script:
 
 
     """
-    samtools view ${reads} > ${reads.baseName}.bam
+    samtools view ${reads} > ${reads.baseName}.sam
 
-    cut -f3,6 ${output} > ${reads.baseName}.tNamesCigars
+    cut -f3,6 ${reads.baseName}.sam > ${reads.baseName}.tNamesCigars
 
     """
 }
