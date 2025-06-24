@@ -59,12 +59,12 @@ workflow {
 
 
     // Assemble Reads                --------
-    assembledReads = pear( gunzip(trimmedreads2))
+    cleanReads = pear( gunzip(trimmedreads2))
     f4ch = fastqc3(assembledReads,Channel.value("assembled"))
 
 
     // assemble reads
-    cleanReads = tstk( assembledReads)
+    // cleanReads = tstk( assembledReads)
 
 
 
