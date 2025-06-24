@@ -144,10 +144,9 @@ process align {
          --outFileNamePrefix  ${pair_id}_i${insertParam}  \
          --runThreadN 12 --genomeLoad NoSharedMemory \
          --outReadsUnmapped Fastx  \
-         --outFilterScoreMinOverLread 0 --outFilterMatchNminOverLread 0 \
 	       --outFilterMismatchNmax 1 \
-         --alignSJoverhangMin 11 \
-         --outFilterMultimapNmax 50 \
+         --alignSJoverhangMin 12 \
+         --outFilterMultimapNmax 100 \
          --outSAMattributes All \
          --outSAMtype BAM Unsorted \
          --alignIntronMin 4 \
@@ -159,10 +158,10 @@ process align {
 	       --limitBAMsortRAM 54317759228 \
          --scoreGenomicLengthLog2scale -1 \
          --chimFilter None \
-         --chimOutType WithinBAM HardClip --chimSegmentMin 12 \
-         --chimJunctionOverhangMin 12 --chimScoreJunctionNonGTAG 0 \
+         --chimOutType WithinBAM HardClip --chimSegmentMin 15 \
+         --chimJunctionOverhangMin 15 --chimScoreJunctionNonGTAG 0 \
          --chimScoreDropMax 80 --chimNonchimScoreDropMin 20 \
-         --chimMainSegmentMultNmax  10
+         --chimMainSegmentMultNmax  100
 
 
     """
